@@ -1,0 +1,21 @@
+# Example; update User / Group / WorkingDirectory and .venv path to your server's actual settings.
+# sudo cp deploy/checkbit-whale-alert.service /etc/systemd/system/
+# sudo systemctl daemon-reload && sudo systemctl enable --now checkbit-whale-alert
+[Unit]
+Description=CheckBit Whale Alert API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/checkbit-whale-alert
+EnvironmentFile=/opt/checkbit-whale-alert/.env
+ExecStart=/opt/checkbit-whale-alert/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8010 --workers 1
+Restart=always
+RestartSec=5
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target
